@@ -22,5 +22,9 @@ export async function downloadCsv(p) {
   p.window.URL.revokeObjectURL = () => {};
   p.window.HTMLAnchorElement.prototype.click = () => {};
   p.$("csv").click();
-  return blob.text();
+  return new Promise((resolve) => {
+    const r = new p.window.FileReader();
+    r.onload = () => resolve(r.result);
+    r.readAsText(blob);
+  });
 }
