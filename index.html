@@ -180,7 +180,9 @@
       }
 
       function csvEscape(s) {
-        return `"${String(s).replace(/"/g, '""')}"`;
+        let v = String(s);
+        if (v !== "-" && /^[=+\-@\t\r]/.test(v)) v = "'" + v;
+        return `"${v.replace(/"/g, '""')}"`;
       }
 
       $("run").onclick = () => {

@@ -15,3 +15,16 @@ export function loadPage() {
     [...$(id).querySelectorAll("tr")].slice(1).map((tr) => [...tr.cells].map((c) => c.textContent));
   return { dom, window: dom.window, document, $, summarize, rows };
 }
+
+export async function downloadCsv(p) {
+  let blob;
+  p.window.URL.createObjectURL = (b) => ((blob = b), "blob:test");
+  p.window.URL.revokeObjectURL = () => {};
+  p.window.HTMLAnchorElement.prototype.click = () => {};
+  p.$("csv").click();
+  return new Promise((resolve) => {
+    const r = new p.window.FileReader();
+    r.onload = () => resolve(r.result);
+    r.readAsText(blob);
+  });
+}
