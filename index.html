@@ -162,7 +162,7 @@
         return { ip: m[1], time: m[2], method: m[3], path, proto: m[5], status: m[6], size: m[7] };
       }
 
-      function top(map, n) {
+      function topN(map, n) {
         return [...map.entries()].sort((a, b) => b[1] - a[1]).slice(0, n);
       }
 
@@ -201,9 +201,9 @@
           ips.set(r.ip, (ips.get(r.ip) || 0) + 1);
         }
         $("stats").textContent = rows.length + " lines parsed · " + bad + " skipped";
-        table($("paths"), top(paths, 20), "path", "n");
-        table($("status"), top(status, 20), "status", "n");
-        table($("ips"), top(ips, 20), "ip", "n");
+        table($("paths"), topN(paths, 20), "path", "n");
+        table($("status"), topN(status, 20), "status", "n");
+        table($("ips"), topN(ips, 20), "ip", "n");
         $("out").classList.remove("hidden");
         $("csv").disabled = false;
       };
