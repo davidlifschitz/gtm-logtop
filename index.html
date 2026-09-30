@@ -151,7 +151,7 @@
       let lastRows = [];
 
       const re =
-        /^(\S+)\s+\S+\s+\S+\s+\[([^\]]+)\]\s+"(\S+)\s+([^"]*?)\s+([^"]+)"\s+(\d{3})\s+(\S+)/;
+        /^(\S+)\s+\S+\s+\S+\s+\[([^\]]+)\]\s+"(\S+)\s+([^"]*)\s+(\S+)"\s+(\d{3})\s+(\S+)/;
 
       function parseLine(line) {
         const m = line.match(re);
@@ -167,9 +167,16 @@
       }
 
       function table(el, rows, h1, h2) {
-        el.innerHTML =
-          `<tr><th>${h1}</th><th>${h2}</th></tr>` +
-          rows.map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join("");
+        const tr = (tag, cells) => {
+          const row = document.createElement("tr");
+          for (const c of cells) {
+            const cell = document.createElement(tag);
+            cell.textContent = c;
+            row.append(cell);
+          }
+          return row;
+        };
+        el.replaceChildren(tr("th", [h1, h2]), ...rows.map((r) => tr("td", r)));
       }
 
       function csvEscape(s) {
