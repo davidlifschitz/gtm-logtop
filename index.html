@@ -187,7 +187,9 @@
 
       $("run").onclick = () => {
         $("warn").textContent = "";
-        const lines = $("src").value.split(/\n/).slice(0, MAX_L);
+        const all = $("src").value.replace(/\r?\n$/, "").split(/\r?\n/);
+        const lines = all.slice(0, MAX_L);
+        const over = all.length - lines.length;
         const rows = [];
         let bad = 0;
         for (const line of lines) {
@@ -215,6 +217,10 @@
         table($("ips"), topN(ips, 20), "ip", "n");
         $("out").classList.remove("hidden");
         $("csv").disabled = false;
+        if (over > 0) {
+          $("warn").textContent =
+            over.toLocaleString("en-US") + " lines past the 20,000 cap were ignored.";
+        }
       };
 
       $("csv").onclick = () => {
