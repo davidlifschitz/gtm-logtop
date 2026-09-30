@@ -82,7 +82,11 @@
       .cards p { margin: 0; color: var(--muted); font-size: 0.875rem; }
       footer { margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.875rem; }
       a { color: inherit; }
-      input[type="file"] { display: none; }
+      .sr-only {
+        position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+        overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+      }
+      #file:focus-visible + .drop { outline: 2px solid var(--accent); outline-offset: 2px; }
       .hidden { display: none; }
       .grid { display: grid; gap: 1rem; }
       @media (min-width: 720px) { .grid { grid-template-columns: 1fr 1fr; } }
@@ -95,10 +99,11 @@
       <p class="lede">
         Drop an nginx access.log. Get top paths, statuses, and IPs. Files never leave the browser.
       </p>
+      <input id="file" type="file" class="sr-only" />
       <label class="drop" id="drop" for="file">Drop access.log</label>
-      <input id="file" type="file" />
+      <label class="sr-only" for="src">Or paste log lines</label>
       <textarea id="src" placeholder='127.0.0.1 - - [20/Aug/2026:12:00:01 +0000] "GET /index.html HTTP/1.1" 200 612'></textarea>
-      <p class="warn" id="warn"></p>
+      <p class="warn" id="warn" role="alert"></p>
       <div class="row">
         <button id="run">Summarize</button>
         <button class="secondary" id="csv" type="button" disabled>Download CSV</button>
@@ -106,7 +111,7 @@
       </div>
       <p class="meta">Cap: 8 MB / 20,000 lines. Combined or common log format.</p>
       <div id="out" class="hidden">
-        <p class="meta" id="stats"></p>
+        <p class="meta" id="stats" aria-live="polite"></p>
         <div class="grid">
           <div>
             <h2>Top paths</h2>
